@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1680114755 source:d:\github\multiparadigm-programming\lab1\lab1\main.c
+1680115066 source:d:\github\multiparadigm-programming\lab1\lab1\main.c
 	<stdio.h>
 	<stdlib.h>
 	"merge_sort.h"
@@ -11,11 +11,10 @@
 1680104012 source:d:\github\multiparadigm-programming\lab1\lab1\quick_sort..c
 	"quick_sort.h"
 
-1680114698 source:d:\github\multiparadigm-programming\lab1\lab1\laplace_distribution.c
-	<math.h>
+1680115336 source:d:\github\multiparadigm-programming\lab1\lab1\laplace_distribution.c
 	"laplace_distribution.h"
 
-1680114798 d:\github\multiparadigm-programming\lab1\lab1\laplace_distribution.h
+1680115215 d:\github\multiparadigm-programming\lab1\lab1\laplace_distribution.h
 	<stdio.h>
 	<math.h>
 

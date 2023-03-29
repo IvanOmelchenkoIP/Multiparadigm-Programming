@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <math.h>
 
-int LaplaceIntervalP(int a, int b);
+double LaplaceIntervalP(int a, int b);
 
-int LaplaceFn(int x);
+double LaplaceFn(int x);
+double PositiveLaplace(int x, int mu, int b);
+double NegativeLaplace(int x, int mu, int b);
+

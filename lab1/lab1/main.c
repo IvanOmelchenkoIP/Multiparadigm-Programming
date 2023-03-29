@@ -15,7 +15,7 @@ int main()
 
     printf("Hello world!\n");
     for (int i = 0; i < sizeof(numbers) / sizeof(numbers[0]); i++) {
-        printf("%d %d\n", numbers[i], LaplaceFn(numbers[i]));
+        printf("%d %f\n", numbers[i], LaplaceFn(numbers[i]));
     }
     return 0;
 }
