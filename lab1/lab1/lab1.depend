@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1680101656 source:d:\github\multiparadigm-programming\lab1\lab1\main.c
+	<stdio.h>
+	<stdlib.h>
+
+1680101170 d:\github\multiparadigm-programming\lab1\lab1\quick_sort.h
+	<stdio.h>
+
+1680104012 source:d:\github\multiparadigm-programming\lab1\lab1\quick_sort..c
+	"quick_sort.h"
+
