@@ -31,9 +31,21 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="laplace_distribution.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="laplace_distribution.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="merge_sort.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="merge_sort.h" />
+		<Unit filename="translator.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="translator.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
