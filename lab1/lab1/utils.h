@@ -1,5 +1,5 @@
+// פאיכ - utils.c
+
 #include <stdio.h>
 
-int intArrLength(int arr[]);
-
-int charArrLength(char * arr[]);
+void CopyIntArray(int source[], int destination[], int elements);

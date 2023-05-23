@@ -1,6 +1,7 @@
+// פאיכ - alphabet.h
+
 #include <stdio.h>
 
-void translate(int numIntervals[], char * alphabet[], char * lingChain[]);
+void Translate(int numbers[], char * alphabet[], int n, int m, int intervals[m][2], char * lingChain[]);
 
-void printLingChain(char * lingChain[]);
-
+void PrintLingChain(char * lingChain[], int n);

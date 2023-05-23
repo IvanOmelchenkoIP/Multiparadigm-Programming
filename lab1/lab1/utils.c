@@ -1,11 +1,10 @@
+// файл - utils.c
+
 #include "utils.h"
 
-int intArrLength(int arr[])
+// копіювання масиву цілочисельних значень
+void CopyIntArray(int source[], int destination[], int elements)
 {
-    return sizeof(arr) / sizeof(arr[0]);
+    for (int i = 0; i < elements; i++) destination[i] = source[i];
 }
 
-int charArrLength(char * arr[])
-{
-    return sizeof(arr) / sizeof(arr[0])
-}

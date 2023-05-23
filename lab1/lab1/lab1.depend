@@ -1,9 +1,12 @@
 # depslib dependency file v1.0
-1680115066 source:d:\github\multiparadigm-programming\lab1\lab1\main.c
+1684869821 source:d:\github\multiparadigm-programming\lab1\lab1\main.c
 	<stdio.h>
 	<stdlib.h>
+	<time.h>
 	"merge_sort.h"
-	"laplace_distribution.h"
+	"utils.h"
+	"alphabet.h"
+	"intervals.h"
 
 1680101170 d:\github\multiparadigm-programming\lab1\lab1\quick_sort.h
 	<stdio.h>
@@ -11,16 +14,55 @@
 1680104012 source:d:\github\multiparadigm-programming\lab1\lab1\quick_sort..c
 	"quick_sort.h"
 
-1680115687 source:d:\github\multiparadigm-programming\lab1\lab1\laplace_distribution.c
+1684842244 source:d:\github\multiparadigm-programming\lab1\lab1\laplace_distribution.c
 	"laplace_distribution.h"
 
-1680115215 d:\github\multiparadigm-programming\lab1\lab1\laplace_distribution.h
+1684344230 d:\github\multiparadigm-programming\lab1\lab1\laplace_distribution.h
 	<stdio.h>
 	<math.h>
 
-1680114040 source:d:\github\multiparadigm-programming\lab1\lab1\merge_sort.c
+1684871775 source:d:\github\multiparadigm-programming\lab1\lab1\merge_sort.c
 	"merge_sort.h"
 
-1680114021 d:\github\multiparadigm-programming\lab1\lab1\merge_sort.h
+1684871750 d:\github\multiparadigm-programming\lab1\lab1\merge_sort.h
 	<stdio.h>
+
+1684871708 source:d:\github\multiparadigm-programming\lab1\lab1\alphabet.c
+	"alphabet.h"
+
+1684871727 d:\github\multiparadigm-programming\lab1\lab1\alphabet.h
+	<stdio.h>
+
+1684871609 source:d:\github\multiparadigm-programming\lab1\lab1\utils.c
+	"utils.h"
+
+1684873005 d:\github\multiparadigm-programming\lab1\lab1\utils.h
+	<stdio.h>
+
+1684868577 d:\github\multiparadigm-programming\lab1\lab1\z_fisher_distribution.h
+	<stdio.h>
+	<math.h>
+
+1684868496 source:d:\github\multiparadigm-programming\lab1\lab1\z_fisher_distribution.c
+	"z_fisher_distribution.h"
+
+1684849477 source:d:\github\multiparadigm-programming\lab1\lab1\interval_divisor.c
+	"interval_divisor.h"
+
+1684849442 d:\github\multiparadigm-programming\lab1\lab1\interval_divisor.h
+	<stdio.h>
+
+1684872461 source:d:\github\multiparadigm-programming\lab1\lab1\intervals.c
+	"intervals.h"
+	"distribution.h"
+
+1684872458 d:\github\multiparadigm-programming\lab1\lab1\intervals.h
+	<stdio.h>
+
+1684871281 d:\github\multiparadigm-programming\lab1\lab1\distribution.h
+	<stdio.h>
+	<math.h>
+
+1684871898 source:d:\github\multiparadigm-programming\lab1\lab1\distribution.c
+	"distribution.h"
 

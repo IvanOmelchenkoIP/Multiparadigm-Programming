@@ -1,20 +1,28 @@
+// файл - alphabet.c
+
 #include "alphabet.h"
 
-void translate(int numIntervals[], char * alphabet[], char * lingChain[])
+// переклад чисельного ряду
+void Translate(int numbers[], char * alphabet[], int n, int m, int intervals[m][2], char * lingChain[])
 {
-    for (int i = 0; i < sizeof(numIntervals) / sizeof(numIntervals[0]); i++)
+    for (int i = 0; i < n; i++)
     {
-        lingChain[i] = alphabet[numIntervals[i]];
+        for (int j = 0; j < m; j++)
+        {
+            if (intervals[j][0] <= numbers[i] && numbers[i] <= intervals[j][1])
+            {
+                lingChain[i] = alphabet[j];
+                break;
+            }
+        }
     }
 }
 
-void printLingChain(char * lingChain[])
+// виведення лінгвістичного ряду
+void PrintLingChain(char * lingChain[], int n)
 {
     printf("Linguistic Chain: \n");
-    for (i = 0; i < sizeof(lingChain) / sizeof(lingChain[0]); i++)
-    {
-        printf("%s ", lingchain[i]);
-    }
+    for (int i = 0; i < n; i++) printf("%s ", lingChain[i]);
     printf("\n");
 }
 

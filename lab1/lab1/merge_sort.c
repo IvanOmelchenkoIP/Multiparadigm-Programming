@@ -1,5 +1,8 @@
+// файл - merge_sort.c
+
 #include "merge_sort.h"
 
+// сортування масиву за алгоритмом merge sort
 void MergeSort(int arr[], int leftInd, int rightInd)
 {
     if (leftInd < rightInd)
