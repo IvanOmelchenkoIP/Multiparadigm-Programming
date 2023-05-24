@@ -1,3 +1,12 @@
+; допоміжна функція, що округляє float до n знаків після коми - необхідно проти помилки floating point undeflow
+(defun cut-float-digits (a digits)
+    (setf float-d (expt 10 digits))
+    (setf a (* a float-d))
+    (setf a (fround a))
+    (setf a (/ a float-d))
+    a
+ )
+
 (defun fisher-z-p (a b) (- (fisher-z-fn b) (fisher-z-fn a)) )
 
 (defun fisher-z-fn (x) 
@@ -33,7 +42,7 @@
 )
 
 (defun inc-beta-fraction (a b x)
-    (defconstant MAXIT 35)
+    (defconstant MAXIT 200)
     (defconstant EPS 3.0e-7)
     (defconstant FPMIN 1.0e-30)
 
@@ -45,66 +54,61 @@
     (setf qam (- a 1.0))
     (setf c 1.0)
     (setf d (- 1.0 (/ (* qab x) qap)))
-
     (when (< (abs d) FPMIN) (setf d FPMIN) )
     (setf d (/ 1.0 d))
     (setf h d)
     (loop for i from 1 to MAXIT do 
-        (print "m")
         (setf m i)
         (setf m2 (* 2.0 m))
 
         (setf aa (/ (* m (* (- b m) x))
             (* (+ qam m2) (+ a m2))))
-        (fround aa 10^-35)
+        (setf aa (cut-float-digits aa 38))
 
         (setf d (+ 1.0 (/ a c)))
-        (fround d 10^-35)
+        (setf d (cut-float-digits aa 38))
 
         (when (< (abs d) FPMIN) (setf d FPMIN))
 
         (setf c (+ 1.0 (/ aa c)))
-        (fround c 10^-35)
+        (setf c (cut-float-digits aa 38))
 
         (when (< (abs c) FPMIN) (setf c FPMIN))
 
         (setf d (/ 1.0 d))
-        (fround d 10^-35)
+        (setf d (cut-float-digits aa 38))
 
         (setf h (* h (* d c)))
-        (fround h 10^-35)
+        (setf h (cut-float-digits aa 38))
 
         (setf aa (/ (* (* (* -1.0 (+ a m)) (+ qab m)) x) 
             (* (+ a m2) (+ qap m2))))
-        (fround aa 10^-35)
+        (setf aa (cut-float-digits aa 38))
 
         (setf d (+ 1.0 (/ a c)))
-        (fround d 10^-35)
+        (setf d (cut-float-digits aa 38))
 
         (when (< (abs d) FPMIN) (setf d FPMIN))
 
         (setf c (+ 1.0 (/ aa c)))
-        (fround c 10^-35)
+        (setf c (cut-float-digits aa 38))
 
         (when (< (abs c) FPMIN) (setf c FPMIN))
 
         (setf d (/ 1.0 d))
-        (fround d 10^-35)
+        (setf d (cut-float-digits aa 38))
 
         (setf del (* d c))
-        (fround del 10^-35)
+        (setf del (cut-float-digits aa 38))
 
         (setf h (* h del))
-        (fround h 10^-35)
+        (setf h (cut-float-digits aa 38))
 
         (print h)
-        ;(when (< (abs (- del 1.0)) EPS) return)
+        (when (< (abs (- del 1.0)) EPS) return)
     )
-    (print "h")
-    (print h)
-    ;(if (> m MAXIT) Nil h)
-    h
+    (if (> m MAXIT) Nil h)
 )
 
 (print "beta")
-(print (incomplete-beta 1.5 1.0 0.5))
+(print (inc-beta-fraction 1.5 1.0 0.5))
