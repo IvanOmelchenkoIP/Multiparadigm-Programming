@@ -35,11 +35,14 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="alphabet.h" />
-		<Unit filename="data.h" />
-		<Unit filename="laplace_distribution.c">
+		<Unit filename="distribution.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="laplace_distribution.h" />
+		<Unit filename="distribution.h" />
+		<Unit filename="intervals.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="intervals.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -51,10 +54,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="utils.h" />
-		<Unit filename="z_fisher_distribution.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="z_fisher_distribution.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
