@@ -9,6 +9,8 @@
 #include "alphabet.h"
 #include "intervals.h"
 
+#include "distribution.h"
+
 #define ALPHABET_POWER 4
 
 int main()

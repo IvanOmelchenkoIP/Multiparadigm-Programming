@@ -20,10 +20,8 @@ int GetPossibleIntervalIndexes(int n, int m, int possibleIntervals[n * n * 2][m]
     for (int i = 0; i < m; i++) localIntervalSizes[i] = intervalSizes[i];
     while(localIntervalSizes[sizeIndex] >= MIN_INTERVAL_SIZE)
     {
-        printf("1\n");
         if (sizeIndex + 1 < m - 1)
         {
-            printf("2\n");
             counter = GetPossibleIntervalIndexes(n, m, possibleIntervals, localIntervalSizes, sizeIndex + 1, counter);
         }
         if (sizeIndex + 1 == m-1)

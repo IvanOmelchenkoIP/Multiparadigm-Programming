@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1684873312 source:d:\github\multiparadigm-programming\lab1\lab1\main.c
+1685038528 source:d:\github\multiparadigm-programming\lab1\lab1\main.c
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
@@ -7,6 +7,7 @@
 	"utils.h"
 	"alphabet.h"
 	"intervals.h"
+	"distribution.h"
 
 1680101170 d:\github\multiparadigm-programming\lab1\lab1\quick_sort.h
 	<stdio.h>
@@ -52,7 +53,7 @@
 1684849442 d:\github\multiparadigm-programming\lab1\lab1\interval_divisor.h
 	<stdio.h>
 
-1684994061 source:d:\github\multiparadigm-programming\lab1\lab1\intervals.c
+1685034446 source:d:\github\multiparadigm-programming\lab1\lab1\intervals.c
 	"intervals.h"
 	"distribution.h"
 
@@ -63,6 +64,6 @@
 	<stdio.h>
 	<math.h>
 
-1685030199 source:d:\github\multiparadigm-programming\lab1\lab1\distribution.c
+1685038410 source:d:\github\multiparadigm-programming\lab1\lab1\distribution.c
 	"distribution.h"
 

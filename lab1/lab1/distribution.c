@@ -22,11 +22,11 @@ double ZFisherDistP(int a, int b)
 double ZFisherDistFunc(int x)
 {
     // обчислення x*
-    double z = ((double)x - (double)MU_PARAM) / (double)SIGMA_PARAM;
+    double z = ((double)x - (double)MU_PARAM) / ((double)SIGMA_PARAM);
     double xi = CountXI(z, D1_PARAM, D2_PARAM);
     // обчислення I
-    double incompleteBeta = IncompleteBetaFunction((double)(D1_PARAM / 2), (double)(D2_PARAM / 2), xi);
-    double beta = BetaFunction((double)(D1_PARAM / 2), (double)(D2_PARAM / 2));
+    double incompleteBeta = IncompleteBetaFunction((double)((double)D1_PARAM / 2), (double)((double)D2_PARAM / 2), xi);
+    double beta = BetaFunction((double)((double)D1_PARAM / 2), (double)((double)D2_PARAM / 2));
     return incompleteBeta / beta;
 }
 
@@ -41,7 +41,7 @@ double IncompleteBetaFunction(double a, double b, double x)
 {
     if (x < 0 || x > 1) return 1.0 / 0;
     double beta;
-    if (x == 0 || x == 1) beta = 0;
+    if (x == 0 || x == 1) beta = 0.0;
     beta = exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * log(x) + b * log(1 - x));
     if (x < (a + 1) / (a + b + 2)) return beta * IncompleteBetaContinuousFraction(a, b, x) / a;
     else return 1 - beta * IncompleteBetaContinuousFraction(b, a, 1 - x) / b;
