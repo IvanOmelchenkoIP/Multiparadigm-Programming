@@ -12,9 +12,9 @@
 
 ; допоміжна функція для обчислення непоіної бета функції
 (defun inc-beta-fraction (a b x)
-    (defconstant MAXIT 30)
-    (defconstant EPS 3.0e-7)
-    (defconstant FPMIN 1.0e-30)
+    (setf MAXIT 200)
+    (setf EPS 3.0e-7)
+    (setf FPMIN 1.0e-30)
 
     (setf m 1) (setf m1 0)
     (setf h 0.0)
@@ -74,7 +74,6 @@
         (setf h (* h del))
         (setf h (cut-float-digits aa 38))
 
-        (print h)
         (when (< (abs (- del 1.0)) EPS) return)
     )
     (if (> m MAXIT) Nil h)
@@ -86,7 +85,7 @@
     (setf beta 0.0)
     (when (or (= x 0) (= x 1)) (setf beta 0.0))
     (setf beta 
-        (exp (+ (+ (- (- (lgamma (+ a b)) (lgamma a)) (lgamma b)) (* a (log x))) (* b (log (- 1.0 b)))))
+        (exp (+ (+ (- (- (lgamma (+ a b)) (lgamma a)) (lgamma b)) (* a (log x))) (* b (log (- 1.0 x)))))
     )
     (if (< x (/ (+ a 1) (+ a (+ b 2)))) 
         (/ (* beta (inc-beta-fraction a b x)) a)
@@ -125,93 +124,126 @@
 ; P(a, b) = F(b) - F(a)
 (defun fisher-z-p (a b) (- (fisher-z-fn b) (fisher-z-fn a)) )
 
+;(print  (fisher-z-fn -2) )
+
+
 ;----------------------------------
 ; копіювання масиву
 (defun get-array-copy (arr size) 
-    (setf copy (make-array N))
+    (setf copy (make-array size))
     (loop for i from 0 to (- size 1) do (setf (aref copy i) (aref arr i)))
     copy
 )
 
 ;----------------------------------
-; обчислення сумарної вірогідності кожного інтервалу з комбінації
-(defun get-int-sum-probability (arr intervals N M)
-    (setf probability 0.0)
-    (loop for i from 0 to (- M 1) do 
-        (print (aref intervals (+ i 1)))
-        (setf probability 
-            (fisher-z-p
-                (aref arr (aref intervals i))
-                (if (= i (- M 1)) (aref arr (- N 1)) (aref arr (- (aref intervals (+ i 1)) 1)))
-            )
+; вибір підходящої комбінації інтервалів
+(defun get-probable-intervals-from-list (arr intervals N M)
+    (setf max-probability 0.0)
+    (setf probable-intervals (make-array M))
+    ;(print "arr")
+    ;(print intervals)
+    (loop for interval-indexes in intervals do
+        ;(print interval-indexes)
+        (setf a 0)
+        (setf b 0)
+        (setf cur-probability 0.0)
+        (setf tmp-arr (make-array M))
+        (loop for i from 0 to (- M 1) do
+            (setf tmp-interval-arr (make-array '(2)))
+
+            (setf a (aref arr (aref interval-indexes i)))
+            (setf b (if (equal i (- M 1)) (aref arr (- N 1)) (aref arr (- (aref interval-indexes (+ i 1)) 1))))
+
+            (setf (aref tmp-interval-arr 0) a)
+            (setf (aref tmp-interval-arr 1) b)
+            (setf (aref tmp-arr i) tmp-interval-arr)
+
+            (setf cur-probability (+ cur-probability (fisher-z-p a b)))
+        )
+
+        (when (= cur-probability 1.0) (return-from interval-sum-probability tmp-arr))
+        (when (> cur-probability max-probability)
+            (setf probable-intervals tmp-arr)
+            (setf max-probability cur-probability)
         )
     )
-    probability
+    probable-intervals
+)
+
+; допоміжна функція для перебору інтервалів
+(defun get-cur-interval-sizes (interval-sizes M size-index min-interval-size)
+    (setf result (make-array '(2)))
+    (setf possible-intervals (list))
+    (setf interval-size-list (list))
+    (setf cur-interval-sizes (get-array-copy interval-sizes M))
+    (loop 
+        (setf tmp-interval-sizes (get-array-copy cur-interval-sizes M))
+        (setf tmp-sizes-list (list Nil))
+        (setf (car tmp-sizes-list) tmp-interval-sizes)
+        (setf interval-size-list (append interval-size-list tmp-sizes-list))
+
+        (decf (aref cur-interval-sizes size-index))
+        (incf (aref cur-interval-sizes (+ size-index 1)))
+        (when (< (aref cur-interval-sizes size-index) min-interval-size) (return))
+    )
+    interval-size-list
 )
 
 ; здійснює перебір інтервалів
-(defun get-possible-intervals (arr N M size-index int-sizes min-int-size)
-    (setf cur-max-probability 0.0)
-    (setf ind-intervals (make-array M))
-    (setf local-int-sizes (get-array-copy int-sizes M))
+(defun get-possible-interval-sizes-list (interval-sizes M min-interval-size)
+    (setf size-index 0)
+    (setf cur-interval-sizes (get-array-copy interval-sizes M))
+    (setf interval-size-list (get-cur-interval-sizes cur-interval-sizes M size-index MIN-INTERVAL-SIZE))
     (loop
-        (when (< (+ size-index 1) (- M 1)) 
-            (setf tmp-ind-intervals (get-possible-intervals arr N M (+ size-index 1) local-int-sizes min-int-size))
-            (setf cur-probability (get-int-sum-probability arr tmp-ind-intervals N M))
-            (when (> cur-probability cur-max-probability) 
-                (when (= cur-probability 1.0) (return-from get-possible-intervals tmp-ind-intervals))
-                (setf cur-max-probability cur-probability)
-                (setf ind-intervals (get-array-copy tmp-ind-intervals M))
-            )
+        (incf size-index)
+        (setf tmp-size-list (list))
+
+        (loop for arr in interval-size-list do 
+            (setf tmp-size-list (append tmp-size-list (get-cur-interval-sizes arr M size-index MIN-INTERVAL-SIZE)))
         )
-        (when (= (+ size-index 1) (- M 1))
-            (setf sum-size 0)
-            (setf tmp-ind-intervals (make-array M))
-            (loop for i from 0 to (- M 1) do
-                (setf (aref tmp-ind-intervals i) sum-size)
-                (setf sum-size (+ sum-size (aref local-int-sizes i)))
-            )
-            (setf cur-probability (get-int-sum-probability arr tmp-ind-intervals N M))
-            (when (> cur-probability cur-max-probability) 
-                (when (= cur-probability 1.0) (return-from get-possible-intervals tmp-ind-intervals))
-                (setf cur-max-probability cur-probability)
-                (setf ind-intervals (get-array-copy tmp-ind-intervals M))
-            )
-        )
-        (setf (aref local-int-sizes size-index) (- (aref local-int-sizes size-index) 1))
-        (setf (aref local-int-sizes (+ size-index 1)) (+ (aref local-int-sizes size-index) 1))
-        (when (< (aref local-int-sizes size-index) min-int-size) 
-            (return-from get-possible-intervals ind-intervals)
-        )
+        (setf interval-size-list tmp-size-list)
+        (when (= size-index (- M 2)) (return))
     )
+    interval-size-list
 )
 
-; повертає інтервали після перебору можливих
-(defun divide-into-intervals (arr N M min-int-size) 
-    (setf int-sizes (make-array M))
-    (print N)
-    (print M)
-    (print min-int-size)
+; повертає розмірності інтервалів після перебору можливих
+(defun divide-into-interval-sizes (N M min-interval-size) 
+    (setf interval-sizes (make-array M))
     (loop for i from 0 to (- M 1) do 
         (if (= i 0) 
-            (setf (aref int-sizes i) (- N (* min-int-size (- M 1)))) 
-            (setf (aref int-sizes i) min-int-size)
+            (setf (aref interval-sizes i) (- N (* min-interval-size (- M 1)))) 
+            (setf (aref interval-sizes i) min-interval-size)
         )
     )
-    (print int-sizes)
-    (get-possible-intervals arr N M 0 int-sizes min-int-size)
+    (get-possible-interval-sizes-list interval-sizes M MIN-INTERVAL-SIZE)
 )
 
-; виокремлення інтервалів з індексів інтервалів
-(defun get-intervals (arr intervals-ind N M) 
-    (setf intervals (make-array M))
-    (loop for i from 0 to (- M 1) do
-        (setf tmp (make-array '(2)))
-        (set (aref tmp 0)(aref arr (aref intervals i)))
-        (setf (aref tmp 1) (if (= i (- M 1)) (aref arr (- N 1)) (aref arr (- (aref intervals (+ i 1)) 1))))
-        (setf (aref intervals i) tmp)
+; здійснює перетворення розмірностей інтервалів на індекси інтервалів
+(defun transform-interval-size-to-index-list (interval-sizes M)
+    (setf index-list (list))
+    (loop for cur-interval-sizes in interval-sizes do
+        (setf tmp-list (list Nil))
+        (setf sum-interval-size 0)
+        (setf tmp-index-intervals (make-array M))
+        (loop for i from 0 to (- M 1) do
+            (setf (aref tmp-index-intervals i) sum-interval-size)
+            (setf sum-interval-size (+ sum-interval-size (aref cur-interval-sizes i)))
+        )
+        (setf (car tmp-list) tmp-index-intervals)
+        (setf index-list (append index-list tmp-list))
     )
-    intervals
+    index-list
+)
+
+; повертає перетворений список розмірностей на індекси інтервалів
+(defun get-possible-interval-index-list (N M min-interval-size)
+    (transform-interval-size-to-index-list (divide-into-interval-sizes N M MIN-INTERVAL-SIZE) M)
+)
+
+; повертає вірогідний інтервал відповідно до функції розподілу
+(defun get-probable-intervals (arr N M min-interval-size)
+    (get-probable-intervals-from-list arr (get-possible-interval-index-list N M min-interval-size) N M)
 )
 
 ;----------------------------------
@@ -220,7 +252,13 @@
     (setf ling-chain (make-array N))
     (loop for i from 0 to (- N 1) do
         (loop for j from 0 to (- M  1) do
-            (when (and (<= (aref intervals j 0) (aref arr i)) (<= (aref arr i) (aref intervals j 1))))
+            (when (and 
+                    (<= (aref (aref intervals j) 0) (aref arr i)) 
+                    (<= (aref arr i) (aref (aref intervals j) 1))
+                )
+                (setf (aref ling-chain i) (aref alphabet j))
+                (return)
+            )
         )
     )
     ling-chain
@@ -231,30 +269,25 @@
 (defun print-array (arr size) (loop for i from 0 to (- size 1) do (write (aref arr i)) (princ " ")))
 
 ; виведення лінгвістичного рядка, що використовую виведення масиву
-(defun print-ling-chain (arr size) (print "Linguistic chain") print-array(arr size))
+(defun print-ling-chain (arr size) (print "Linguistic chain") (print-array arr size))
 
 ;----------------------------------
 ; головна процедура
 (defun main ()
     ; необхідні дані для виконання програми
-    (defconstant M 4)
-    (defconstant N 14)
-    (defconstant MIN-INTERVAL-SIZE 2)
+    (setf M 4)
+    (setf N 14)
+    (setf MIN-INTERVAL-SIZE 2)
     (setf alphabet (make-array M :initial-contents '("A" "B" "C" "D")))
     (setf numbers (make-array N :initial-contents '(13 1 2 15 -10 20 3 12 4 5 6 26 7 8)))  
     
-    (setf sorted (sort (get-array-copy numbers N) #'< ))
-    (setf interval-inds (divide-into-intervals sorted N M MIN-INTERVAL-SIZE))
-    ;(print-ling-chain ( 
-    ;    (translate-to-ling-chain arr alphabet 
-    ;        (get-intervals numbers 
-    ;            (divide-into-intervals  N M)
-    ;        N M) 
-    ;    N M)
-    ;    )
-    ;N)
+    (setf intervals (get-probable-intervals (sort (get-array-copy numbers N) #'< ) N M MIN-INTERVAL-SIZE))
+    (print-ling-chain (
+        translate-to-ling-chain numbers alphabet intervals N M
+    ) N)
 )
 
 ; вимірювання часу виконання програми
 (time (main))
+
 
