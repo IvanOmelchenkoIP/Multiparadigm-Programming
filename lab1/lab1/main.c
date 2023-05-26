@@ -43,6 +43,9 @@ int main()
     Translate(numbers, alphabet, numbersCount, ALPHABET_POWER, intervals, lingChain);
     PrintLingChain(lingChain, numbersCount);
 
+    double z5 = ZFisherDistFunc(5)
+   ;
+   printf("5 - %f\n", z5);
     // кінець виконання програми
     clock_t end = clock() - start;
     double seconds = ((double) end) / CLOCKS_PER_SEC;

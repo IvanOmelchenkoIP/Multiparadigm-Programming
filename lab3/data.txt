@@ -1,0 +1,37 @@
+/* підрахунок H */
+% incBetaFracH(M, MAXIT, H, HRES) :- M > MAXIT -> HRES is 1.0 / 0 ; HRES
+% is H.
+/* вирішення, чи запускати знову цикл */
+/*incBetaFracLoopLauncher(X, A, B, MAXIT, EPS, FPMIN, M, M2, QAB, QAP, QAM, AA, C, D, DEL, H, HRES) :-
+    M < (MAXIT + 1) ->
+    (   incBetaFracLoop(X, A, B, MAXIT, EPS, FPMIN, M, M2, QAB, QAP, QAM, AA, C, D, DEL, H, HRES1),
+        HRES is HRES1   )
+    ;
+    (   incBetaFracH(M, MAXIT, H, HRES1),
+        HRES is HRES1   ).*/
+/* відповідає тілу циклу функції IncompleteBetaContinuousFraction в C */
+/*incBetaFracLoop(X, A, B, MAXIT, EPS, FPMIN, M, M2, QAB, QAP, QAM, AA, C, D, DEL, H, HRES) :-
+    writeln("here"),
+    M2 is M * 2,
+    AA is M * (B - M)*X / ((QAM + M2)*(A + M2)),
+    D is 1.0 + AA * D,
+    abs(D) < FPMIN -> D is FPMIN ; D is D,
+    C is 1.0 + AA / C,
+    abs(C) < FPMIN -> C is FPMIN ; C is C,
+    D is 1.0 / D,
+    H is H * D * C,
+    AA is (-(A + M)*(QAB + M) * X / ((A + M2) * (QAP + M2))),
+    D is 1.0 + AA * D,
+    abs(D) < FPMIN -> D is FPMIN ; D is D,
+    C is 1.0 + AA / C,
+    abs(C) < FPMIN -> C is FPMIN ; C is C,
+    D is 1.0 / D,
+    DEL is D * C,
+    H is DEL * H,
+    abs(DEL - 1.0) < EPS ->
+    (   incBetaFracH(M, MAXIT, H, HRES1),
+        HRES is HRES1   )
+    ;
+    (   M is M + 1,
+        incBetaFracLoopLauncher(X, A, B, MAXIT, EPS, FPMIN, M, M2, QAB, QAP, QAM, AA, C, D, DEL, H, HRES1),
+        HRES is HRES1   ).*/
